@@ -35,5 +35,5 @@ resource "kubernetes_namespace" "infraservices" {
     name = "infraservices"
   }
 
-  depends_on = [vultr_kubernetes.k8]
+  depends_on = [local_file.kubeconfig, vultr_kubernetes.k8]
 }
