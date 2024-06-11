@@ -6,3 +6,7 @@ output "vultr_kube_config" {
 output "vultr_kubernetes_host" {
   value = vultr_kubernetes.k8.endpoint
 }
+
+output "cluster_id" {
+  value = vultr_kubernetes.my_cluster.id
+}
