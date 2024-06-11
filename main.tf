@@ -18,7 +18,7 @@ resource "vultr_kubernetes" "k8" {
 }
 
 resource "local_file" "kubeconfig" {
-  content  = vultr_kubernetes.k8.kube_config
+  content  = base64decode(vultr_kubernetes.k8.kube_config)
   filename = "kubeconfig.yaml"
 
   depends_on = [vultr_kubernetes.k8]
