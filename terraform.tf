@@ -3,15 +3,6 @@
 
 terraform {
 
-  cloud {
-    organization = "leoelios"
-
-    workspaces {
-      name    = "poc"
-      project = "sample-project"
-    }
-  }
-
   required_providers {
     aws = {
       source  = "hashicorp/aws"
