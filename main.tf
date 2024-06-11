@@ -18,11 +18,9 @@ resource "vultr_kubernetes" "k8" {
 }
 
 resource "local_file" "kubeconfig" {
-  filename             = "${path.module}/kubeconfig.yaml"
-  content_base64       = vultr_kubernetes.k8.kube_config
-  directory_permission = 777
-  file_permission      = 777
-  depends_on           = [vultr_kubernetes.k8]
+  filename       = "${path.module}/kubeconfig.yaml"
+  content_base64 = vultr_kubernetes.k8.kube_config
+  depends_on     = [vultr_kubernetes.k8]
 }
 
 provider "kubernetes" {
