@@ -3,6 +3,14 @@
 
 terraform {
 
+  cloud {
+    organization = "leoelios"
+
+    workspaces {
+      name = "iac"
+    }
+  }
+
   required_providers {
     vultr = {
       source  = "vultr/vultr"
