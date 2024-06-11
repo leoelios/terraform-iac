@@ -19,17 +19,20 @@ resource "vultr_kubernetes" "k8" {
 
 resource "local_file" "kubeconfig" {
   content  = vultr_kubernetes.k8.kube_config
-  filename = "${path.module}/kubeconfig.yaml"
+  filename = "kubeconfig.yaml"
+
+  depends_on = [vultr_kubernetes.k8]
 }
 
 provider "kubernetes" {
-  config_path = "${path.module}/kubeconfig.yaml"
+  config_path = "kubeconfig.yaml"
 }
+
 
 resource "kubernetes_namespace" "infraservices" {
   metadata {
     name = "infraservices"
   }
 
-  depends_on = [vultr_kubernetes.k8, local_file.kubeconfig]
+  depends_on = [local_file.kubeconfig]
 }
