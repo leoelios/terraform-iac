@@ -18,18 +18,19 @@ resource "vultr_kubernetes" "k8" {
 }
 
 resource "local_file" "kubeconfig" {
-  content              = base64decode(vultr_kubernetes.k8.kube_config)
-  filename             = "${path.module}/kubeconfig.yaml"
-  file_permission      = "0600"
-  directory_permission = "0755"
-  depends_on           = [vultr_kubernetes.k8]
+  content    = base64decode(vultr_kubernetes.k8.kube_config)
+  filename   = "${path.module}/kubeconfig.yaml"
+  depends_on = [vultr_kubernetes.k8]
 }
 
 provider "kubernetes" {
-  config_path = "${path.module}/kubeconfig.yaml"
+  alias       = "dynamic"
+  config_path = local_file.kubeconfig.filename
 }
 
 resource "kubernetes_namespace" "infraservices" {
+  provider = kubernetes.dynamic
+
   metadata {
     name = "infraservices"
   }
