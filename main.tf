@@ -37,3 +37,76 @@ resource "kubernetes_namespace" "infraservices" {
 
   depends_on = [local_file.kubeconfig]
 }
+
+resource "kubernetes_persistent_volume_claim" "postgres_pvc" {
+  provider = kubernetes.dynamic
+
+  metadata {
+    name      = "postgres-pvc"
+    namespace = kubernetes_namespace.infraservices.metadata.0.name
+  }
+
+  spec {
+    access_modes = ["ReadWriteOnce"]
+
+    resources {
+      requests = {
+        storage = "100Gi"
+      }
+    }
+    storage_class_name = "vultr-block-storage-hdd"
+  }
+}
+
+resource "kubernetes_deployment" "postgres" {
+  provider = kubernetes.dynamic
+
+  metadata {
+    name      = "postgres"
+    namespace = kubernetes_namespace.infraservices.metadata.0.name
+    labels = {
+      app = "postgres"
+    }
+  }
+
+  spec {
+    replicas = 1
+
+    selector {
+      match_labels = {
+        app = "postgres"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          app = "postgres"
+        }
+      }
+
+      spec {
+        container {
+          name  = "postgres"
+          image = "postgres:latest"
+
+          port {
+            container_port = 5432
+          }
+
+          volume_mount {
+            mount_path = "/var/lib/postgresql/data"
+            name       = "postgres-data"
+          }
+        }
+
+        volume {
+          name = "postgres-data"
+          persistent_volume_claim {
+            claim_name = kubernetes_persistent_volume_claim.postgres_pvc.metadata.0.name
+          }
+        }
+      }
+    }
+  }
+}
