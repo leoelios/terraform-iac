@@ -8,5 +8,5 @@ output "vultr_kubernetes_host" {
 }
 
 output "cluster_id" {
-  value = vultr_kubernetes.my_cluster.id
+  value = vultr_kubernetes.k8.id
 }
