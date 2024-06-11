@@ -27,9 +27,6 @@ resource "local_file" "kubeconfig" {
 
 provider "kubernetes" {
   config_path = "${path.module}/kubeconfig.yaml"
-
-  host                   = vultr_kubernetes.k8.endpoint
-  cluster_ca_certificate = vultr_kubernetes.k8.cluster_ca_certificate
 }
 
 resource "kubernetes_namespace" "infraservices" {
