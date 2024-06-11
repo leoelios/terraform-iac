@@ -28,85 +28,91 @@ provider "kubernetes" {
   config_path = local_file.kubeconfig.filename
 }
 
-resource "kubernetes_namespace" "infraservices" {
-  provider = kubernetes.dynamic
+# resource "kubernetes_namespace" "infraservices" {
+#   provider = kubernetes.dynamic
 
-  metadata {
-    name = "infraservices"
-  }
+#   metadata {
+#     name = "infraservices"
+#   }
 
-  depends_on = [local_file.kubeconfig]
-}
+#   depends_on = [local_file.kubeconfig]
+# }
 
-resource "kubernetes_persistent_volume_claim" "postgres_pvc" {
-  provider = kubernetes.dynamic
+# resource "kubernetes_persistent_volume_claim" "postgres_pvc" {
+#   provider = kubernetes.dynamic
 
-  metadata {
-    name      = "postgres-pvc"
-    namespace = kubernetes_namespace.infraservices.metadata.0.name
-  }
+#   metadata {
+#     name      = "postgres-pvc"
+#     namespace = kubernetes_namespace.infraservices.metadata.0.name
+#   }
 
-  spec {
-    access_modes = ["ReadWriteOnce"]
+#   spec {
+#     access_modes = ["ReadWriteOnce"]
 
-    resources {
-      requests = {
-        storage = "100Gi"
-      }
-    }
-    storage_class_name = "vultr-block-storage-hdd"
-  }
-}
+#     resources {
+#       requests = {
+#         storage = "100Gi"
+#       }
+#     }
+#     storage_class_name = "vultr-block-storage-hdd"
+#   }
 
-resource "kubernetes_deployment" "postgres" {
-  provider = kubernetes.dynamic
+#   depends_on = [kubernetes_namespace.infraservices]
 
-  metadata {
-    name      = "postgres"
-    namespace = kubernetes_namespace.infraservices.metadata.0.name
-    labels = {
-      app = "postgres"
-    }
-  }
+# }
 
-  spec {
-    replicas = 1
+# resource "kubernetes_deployment" "postgres" {
+#   provider = kubernetes.dynamic
 
-    selector {
-      match_labels = {
-        app = "postgres"
-      }
-    }
+#   metadata {
+#     name      = "postgres"
+#     namespace = kubernetes_namespace.infraservices.metadata.0.name
+#     labels = {
+#       app = "postgres"
+#     }
+#   }
 
-    template {
-      metadata {
-        labels = {
-          app = "postgres"
-        }
-      }
+#   spec {
+#     replicas = 1
 
-      spec {
-        container {
-          name  = "postgres"
-          image = "postgres:latest"
+#     selector {
+#       match_labels = {
+#         app = "postgres"
+#       }
+#     }
 
-          port {
-            container_port = 5432
-          }
+#     template {
+#       metadata {
+#         labels = {
+#           app = "postgres"
+#         }
+#       }
 
-          volume_mount {
-            mount_path = "/var/lib/postgresql/data"
-            name       = "postgres-data"
-          }
-        }
+#       spec {
+#         container {
+#           name  = "postgres"
+#           image = "postgres:latest"
 
-        volume {
-          name = "postgres-data"
-          persistent_volume_claim {
-            claim_name = kubernetes_persistent_volume_claim.postgres_pvc.metadata.0.name
-          }
-        }
-      }
-    }
-  }
-}
+#           port {
+#             container_port = 5432
+#           }
+
+#           volume_mount {
+#             mount_path = "/var/lib/postgresql/data"
+#             name       = "postgres-data"
+#           }
+#         }
+
+#         volume {
+#           name = "postgres-data"
+#           persistent_volume_claim {
+#             claim_name = kubernetes_persistent_volume_claim.postgres_pvc.metadata.0.name
+#           }
+#         }
+#       }
+#     }
+#   }
+
+#   depends_on = [kubernetes_persistent_volume_claim.postgres_pvc]
+
+# }
