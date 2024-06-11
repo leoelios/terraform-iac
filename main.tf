@@ -27,3 +27,13 @@ provider "kubernetes" {
   alias       = "dynamic"
   config_path = local_file.kubeconfig.filename
 }
+
+resource "kubernetes_namespace" "infraservices" {
+  provider = kubernetes.dynamic
+
+  metadata {
+    name = "infraservices"
+  }
+
+  depends_on = [local_file.kubeconfig]
+}
