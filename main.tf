@@ -5,7 +5,7 @@ provider "vultr" {
 resource "vultr_kubernetes" "k8" {
   region  = "sao"
   label   = "vke-test"
-  version = "v1.29.4+1"
+  version = "v1.30.0+1"
 
   provisioner "local-exec" {
     command = "echo ${self.kube_config} > kubeconfig.txt"

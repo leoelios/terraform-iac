@@ -14,7 +14,7 @@ terraform {
   required_providers {
     vultr = {
       source  = "vultr/vultr"
-      version = "2.19.0"
+      version = "2.20.1"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
