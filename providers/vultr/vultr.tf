@@ -23,3 +23,8 @@ resource "vultr_kubernetes_node_pools" "np" {
   min_nodes     = 1
   max_nodes     = 2
 }
+
+
+output "vultr_kube_config" {
+  value = vultr_kubernetes.k8.kube_config
+}
