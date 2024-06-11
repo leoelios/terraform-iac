@@ -1,5 +1,3 @@
-
-
 provider "vultr" {
   api_key = var.vultr_api_key
 }
@@ -24,7 +22,20 @@ resource "vultr_kubernetes_node_pools" "np" {
   max_nodes     = 2
 }
 
-
 output "vultr_kube_config" {
-  value = vultr_kubernetes.k8.kube_config
+  value     = vultr_kubernetes.k8.kube_config
+  sensitive = true
+}
+
+
+provider "kubernetes" {
+  config_path = "${path.module}/kubeconfig.txt"
+}
+
+resource "kubernetes_namespace" "infraservices" {
+  metadata {
+    name = "infraservices"
+  }
+
+  depends_on = [vultr_kubernetes.k8]
 }
