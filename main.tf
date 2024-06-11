@@ -15,10 +15,6 @@ resource "vultr_kubernetes" "k8" {
     min_nodes     = 1
     max_nodes     = 2
   }
-
-  provisioner "local-exec" {
-    command = "echo ${self.kube_config} > kubeconfig.txt"
-  }
 }
 
 resource "local_file" "kubeconfig" {
