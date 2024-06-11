@@ -28,14 +28,14 @@ output "vultr_kube_config" {
 }
 
 
-provider "kubernetes" {
-  config_path = "${path.module}/kubeconfig.txt"
-}
+# provider "kubernetes" {
+#   config_path = "${path.module}/kubeconfig.txt"
+# }
 
-resource "kubernetes_namespace" "infraservices" {
-  metadata {
-    name = "infraservices"
-  }
+# resource "kubernetes_namespace" "infraservices" {
+#   metadata {
+#     name = "infraservices"
+#   }
 
-  depends_on = [vultr_kubernetes.k8]
-}
+#   depends_on = [vultr_kubernetes.k8]
+# }
