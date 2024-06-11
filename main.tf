@@ -17,9 +17,6 @@ resource "vultr_kubernetes_node_pools" "np" {
   node_quantity = 1
   plan          = "vc2-1c-1gb-sc1"
   label         = "vke-nodepool"
-  auto_scaler   = true
-  min_nodes     = 1
-  max_nodes     = 2
 }
 
 output "vultr_kube_config" {
