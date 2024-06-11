@@ -11,6 +11,9 @@ resource "vultr_kubernetes" "k8" {
     node_quantity = 1
     plan          = "vc2-1c-1gb-sc1"
     label         = "vke-nodepool"
+    auto_scaler   = true
+    min_nodes     = 1
+    max_nodes     = 2
   }
 
   provisioner "local-exec" {
@@ -18,19 +21,14 @@ resource "vultr_kubernetes" "k8" {
   }
 }
 
-output "vultr_kube_config" {
-  value     = vultr_kubernetes.k8.kube_config
-  sensitive = true
+provider "kubernetes" {
+  config_path = "${path.module}/kubeconfig.txt"
 }
 
-# provider "kubernetes" {
-#   config_path = "${path.module}/kubeconfig.txt"
-# }
+resource "kubernetes_namespace" "infraservices" {
+  metadata {
+    name = "infraservices"
+  }
 
-# resource "kubernetes_namespace" "infraservices" {
-#   metadata {
-#     name = "infraservices"
-#   }
-
-#   depends_on = [vultr_kubernetes.k8]
-# }
+  depends_on = [vultr_kubernetes.k8]
+}
