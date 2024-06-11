@@ -28,7 +28,6 @@ provider "kubernetes" {
   config_path = "kubeconfig.yaml"
 }
 
-
 resource "kubernetes_namespace" "infraservices" {
   metadata {
     name = "infraservices"
