@@ -21,8 +21,13 @@ resource "vultr_kubernetes" "k8" {
   }
 }
 
+resource "local_file" "kubeconfig" {
+  content  = vultr_kubernetes.k8.kube_config
+  filename = "${path.module}/kubeconfig.yaml"
+}
+
 provider "kubernetes" {
-  config_path = "${path.module}/kubeconfig.txt"
+  config_path = "${path.module}/kubeconfig.yaml"
 }
 
 resource "kubernetes_namespace" "infraservices" {
