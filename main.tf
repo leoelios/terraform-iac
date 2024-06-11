@@ -25,7 +25,7 @@ resource "local_file" "kubeconfig" {
 
 provider "kubernetes" {
   alias       = "dynamic"
-  config_path = local_file.kubeconfig.filename
+  config_path = "${path.module}/kubeconfig.yaml"
 }
 
 resource "kubernetes_namespace" "infraservices" {
