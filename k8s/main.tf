@@ -1,8 +1,3 @@
-module "vultr" {
-  source        = "./vultr"
-  vultr_api_key = vultr.var.vultr_api_key
-}
-
 provider "kubernetes" {
   config_path = "${path.module}/kubeconfig.txt"
 }
