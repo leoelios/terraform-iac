@@ -19,13 +19,13 @@ resource "vultr_kubernetes" "k8" {
 
 resource "local_file" "kubeconfig" {
   content  = base64decode(vultr_kubernetes.k8.kube_config)
-  filename = "kubeconfig.yaml"
+  filename = "${path.module}/kubeconfig.yaml"
 
   depends_on = [vultr_kubernetes.k8]
 }
 
 provider "kubernetes" {
-  config_path = "kubeconfig.yaml"
+  config_path = "${path.module}/kubeconfig.yaml"
 }
 
 resource "kubernetes_namespace" "infraservices" {
