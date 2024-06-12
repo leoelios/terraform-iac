@@ -199,12 +199,15 @@ resource "helm_release" "mongodb" {
 
   values = [
     <<EOF
-    architecture=replicaset
-    replicaCount=2
-    externalAccess.enabled=true
-    externalAccess.service.type=NodePort
-    externalAccess.service.nodePorts[0]='30004'
-    externalAccess.service.nodePorts[1]='30005'
+    architecture: replicaset
+    replicaCount: 2
+    externalAccess:
+      enabled: true
+      service:
+        type: NodePort
+        nodePorts: 
+          - 30004
+          - 30005
     EOF
   ]
 
