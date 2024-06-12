@@ -212,13 +212,8 @@ resource "helm_release" "mongodb" {
       size: 200Gi
       storageClass: vultr-block-storage-hdd
 
-    resources:
-      limits:
-        cpu: 250m
-        memory: 2512Mi
-      requests:
-        cpu: 200m
-        memory: 212Mi
+    resourcesPreset: nano
+    arbiter.resourcesPreset: nano
 
     architecture: replicaset
     replicaCount: 1
