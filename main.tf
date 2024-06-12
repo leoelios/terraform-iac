@@ -211,21 +211,20 @@ resource "helm_release" "mongodb" {
 
     resources:
       limits:
-        cpu: 550m
-        memory: 512Mi
+        cpu: 250m
+        memory: 2512Mi
       requests:
         cpu: 200m
-        memory: 412Mi
+        memory: 212Mi
 
     architecture: replicaset
-    replicaCount: 2
+    replicaCount: 1
     externalAccess:
       enabled: true
       service:
         type: NodePort
         nodePorts: 
           - 30004
-          - 30005
     EOF
   ]
 
