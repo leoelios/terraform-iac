@@ -190,3 +190,22 @@ resource "helm_release" "argocd" {
   ]
 
 }
+
+resource "helm_release" "mongodb" {
+  name       = "mongodb"
+  repository = "https://charts.bitnami.com/bitnami"
+  chart      = "mongodb"
+  version    = "15.6.6"
+
+  values = [
+    <<EOF
+    architecture=replicaset
+    replicaCount=2
+    externalAccess.enabled=true
+    externalAccess.service.type=NodePort
+    externalAccess.service.nodePorts[0]='30004'
+    externalAccess.service.nodePorts[1]='30005'
+    EOF
+  ]
+
+}
