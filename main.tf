@@ -200,6 +200,10 @@ resource "helm_release" "mongodb" {
 
   values = [
     <<EOF
+    persistence:
+      size: 200Gi
+      storageClass: vultr-block-storage-hdd
+
     architecture: replicaset
     replicaCount: 2
     externalAccess:
