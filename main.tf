@@ -183,7 +183,7 @@ resource "helm_release" "argocd" {
     <<EOF
     server:
       service:
-        type: ClusterIP
+        type: NodePort
         nodePortHttp: 30002
         nodePortHttps: 30003
     EOF
