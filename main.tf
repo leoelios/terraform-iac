@@ -158,9 +158,3 @@ resource "kubernetes_service" "postgres" {
     }
   }
 }
-
-
-module "argocd" {
-  source  = "aigisuk/argocd/kubernetes"
-  version = "0.2.7"
-}
