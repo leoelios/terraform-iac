@@ -185,7 +185,7 @@ resource "helm_release" "argocd" {
       service:
         type: NodePort
         port: 5432
-        node_port: 30002
+        nodePort: 30002
     EOF
   ]
 
