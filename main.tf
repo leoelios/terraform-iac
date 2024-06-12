@@ -17,8 +17,6 @@ resource "vultr_kubernetes" "k8" {
   }
 }
 
-
-
 provider "kubernetes" {
   alias = "dynamic"
 
@@ -47,4 +45,99 @@ resource "kubernetes_namespace" "apps" {
   }
 
   depends_on = [vultr_kubernetes.k8]
+}
+
+
+resource "kubernetes_secret" "postgres_secret" {
+  metadata {
+    name      = "postgres-secret"
+    namespace = kubernetes_namespace.infraservices.metadata[0].name
+  }
+
+  data = {
+    password = base64encode(var.postgres_password)
+  }
+}
+
+resource "kubernetes_deployment" "postgres" {
+  metadata {
+    name      = "postgres"
+    namespace = kubernetes_namespace.infraservices.metadata[0].name
+  }
+
+  spec {
+    replicas = 1
+
+    selector {
+      match_labels = {
+        app = "postgres"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          app = "postgres"
+        }
+      }
+
+      spec {
+        container {
+          name  = "postgres"
+          image = "postgres:13"
+
+          env {
+            name = "POSTGRES_PASSWORD"
+            value_from {
+              secret_key_ref {
+                name = kubernetes_secret.postgres_secret.metadata[0].name
+                key  = "password"
+              }
+            }
+          }
+
+          port {
+            container_port = 5432
+          }
+
+        }
+      }
+    }
+  }
+}
+
+resource "kubernetes_persistent_volume_claim" "postgres_pvc" {
+  metadata {
+    name      = "postgres-pvc"
+    namespace = kubernetes_namespace.infraservices.metadata[0].name
+  }
+
+  spec {
+    access_modes       = ["ReadWriteOnce"]
+    storage_class_name = "vultr-block-storage-hdd"
+
+    resources {
+      requests = {
+        storage = "100Gi"
+      }
+    }
+  }
+}
+
+resource "kubernetes_service" "postgres" {
+  metadata {
+    name      = "postgres"
+    namespace = kubernetes_namespace.infraservices.metadata[0].name
+  }
+
+  spec {
+    selector = {
+      app = "postgres"
+    }
+
+    port {
+      port        = 5432
+      target_port = 5432
+    }
+  }
 }

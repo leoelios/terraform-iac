@@ -7,3 +7,9 @@ variable "vultr_api_key" {
   sensitive   = true
   nullable    = false
 }
+
+variable "postgres_password" {
+  description = "Default postgres user password for setup"
+  nullable    = false
+  sensitive   = true
+}
