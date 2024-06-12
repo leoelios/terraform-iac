@@ -96,10 +96,23 @@ resource "kubernetes_deployment" "postgres" {
             }
           }
 
+          volume_mount {
+            name       = "postgres-data"
+            mount_path = "/var/lib/postgresql/data"
+          }
+
           port {
             container_port = 5432
           }
 
+        }
+
+        volume {
+          name = "postgres-data"
+
+          persistent_volume_claim {
+            claim_name = kubernetes_persistent_volume_claim.postgres_pvc.metadata[0].name
+          }
         }
       }
     }
