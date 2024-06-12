@@ -158,3 +158,35 @@ resource "kubernetes_service" "postgres" {
     }
   }
 }
+
+
+provider "helm" {
+  kubernetes {
+    host = "https://${vultr_kubernetes.k8.endpoint}:6443"
+
+    client_certificate     = base64decode(vultr_kubernetes.k8.client_certificate)
+    client_key             = base64decode(vultr_kubernetes.k8.client_key)
+    cluster_ca_certificate = base64decode(vultr_kubernetes.k8.cluster_ca_certificate)
+  }
+}
+
+resource "helm_release" "argocd" {
+  name             = "argocd"
+  namespace        = kubernetes_namespace.apps.metadata[0].name
+  create_namespace = true
+
+  repository = "https://argoproj.github.io/argo-helm"
+  chart      = "argo-cd"
+  version    = "5.15.3"
+
+  values = [
+    <<EOF
+    server:
+      service:
+        type: NodePort
+        port: 5432
+        node_port: 30002
+    EOF
+  ]
+
+}

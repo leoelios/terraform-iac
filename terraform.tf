@@ -3,14 +3,6 @@
 
 terraform {
 
-  cloud {
-    organization = "leoelios"
-
-    workspaces {
-      name = "iac"
-    }
-  }
-
   required_providers {
     vultr = {
       source  = "vultr/vultr"
@@ -19,6 +11,10 @@ terraform {
     kubernetes = {
       source  = "hashicorp/kubernetes"
       version = "2.30.0"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "2.13.2"
     }
   }
 
