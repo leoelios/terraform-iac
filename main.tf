@@ -188,29 +188,55 @@ resource "helm_release" "argocd" {
 
 }
 
-resource "helm_release" "mongodb" {
-  name       = "mongodb"
-  namespace  = kubernetes_namespace.infraservices.metadata[0].name
-  repository = "https://charts.bitnami.com/bitnami"
-  chart      = "mongodb"
-  version    = "15.6.6"
+resource "helm_release" "metrics_server" {
+  name       = "metrics-server"
+  repository = "https://kubernetes-sigs.github.io/metrics-server/"
+  chart      = "metrics-server"
+  namespace  = "kube-system"
+  version    = "3.12.1"
 
-  values = [
-    <<EOF
-    persistence:
-      size: 200Gi
-      storageClass: vultr-block-storage-hdd
+  set {
+    name  = "args"
+    value = "--kubelet-insecure-tls"
+  }
 
-    architecture: replicaset
-    replicaCount: 2
-    externalAccess:
-      enabled: true
-      service:
-        type: NodePort
-        nodePorts: 
-          - 30004
-          - 30005
-    EOF
-  ]
-
+  set {
+    name  = "extraArgs.kubelet-preferred-address-types"
+    value = "InternalIP,ExternalIP,Hostname"
+  }
 }
+
+# resource "helm_release" "mongodb" {
+#   name       = "mongodb"
+#   namespace  = kubernetes_namespace.infraservices.metadata[0].name
+#   repository = "https://charts.bitnami.com/bitnami"
+#   chart      = "mongodb"
+#   version    = "15.6.6"
+
+#   values = [
+#     <<EOF
+#     persistence:
+#       size: 200Gi
+#       storageClass: vultr-block-storage-hdd
+
+#     resources:
+#       limits:
+#         cpu: 550m
+#         memory: 512Mi
+#       requests:
+#         cpu: 200m
+#         memory: 412Mi
+
+#     architecture: replicaset
+#     replicaCount: 2
+#     externalAccess:
+#       enabled: true
+#       service:
+#         type: NodePort
+#         nodePorts: 
+#           - 30004
+#           - 30005
+#     EOF
+#   ]
+
+# }
