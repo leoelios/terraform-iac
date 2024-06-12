@@ -184,10 +184,11 @@ resource "helm_release" "argocd" {
     server:
       service:
         type: NodePort
-        - port: 80
-          nodePort: 30002
-        - port: 443
-          nodePort: 30003
+        ports:
+          - port: 80
+            nodePort: 30002
+          - port: 443
+            nodePort: 30003
     EOF
   ]
 
