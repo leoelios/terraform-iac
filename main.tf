@@ -195,15 +195,6 @@ resource "helm_release" "metrics_server" {
   namespace  = "kube-system"
   version    = "3.12.1"
 
-  set {
-    name  = "args"
-    value = "--kubelet-insecure-tls"
-  }
-
-  set {
-    name  = "extraArgs.kubelet-preferred-address-types"
-    value = "InternalIP,ExternalIP,Hostname"
-  }
 }
 
 # resource "helm_release" "mongodb" {
