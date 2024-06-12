@@ -147,6 +147,8 @@ resource "kubernetes_service" "postgres" {
       app = "postgres"
     }
 
+    type = "NodePort"
+
     port {
       port        = 5432
       target_port = 5432
