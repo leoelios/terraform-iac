@@ -177,7 +177,7 @@ resource "helm_release" "argocd" {
 
   repository = "https://argoproj.github.io/argo-helm"
   chart      = "argo-cd"
-  version    = "5.15.3"
+  version    = "7.1.2"
 
   values = [
     <<EOF
