@@ -116,6 +116,8 @@ resource "kubernetes_deployment" "postgres" {
       }
     }
   }
+
+  depends_on = [kubernetes_secret.postgres_secret]
 }
 
 resource "kubernetes_persistent_volume_claim" "postgres_pvc" {
