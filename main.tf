@@ -18,8 +18,6 @@ resource "vultr_kubernetes" "k8" {
 }
 
 provider "kubernetes" {
-  alias = "dynamic"
-
   host = "https://${vultr_kubernetes.k8.endpoint}:6443"
 
   client_certificate     = base64decode(vultr_kubernetes.k8.client_certificate)
@@ -28,8 +26,6 @@ provider "kubernetes" {
 }
 
 resource "kubernetes_namespace" "infraservices" {
-  provider = kubernetes.dynamic
-
   metadata {
     name = "infraservices"
   }
@@ -38,8 +34,6 @@ resource "kubernetes_namespace" "infraservices" {
 }
 
 resource "kubernetes_namespace" "apps" {
-  provider = kubernetes.dynamic
-
   metadata {
     name = "apps"
   }
