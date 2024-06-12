@@ -49,7 +49,7 @@ resource "kubernetes_secret" "postgres_secret" {
   }
 
   data = {
-    password = base64encode(var.postgres_password)
+    password = var.postgres_password
   }
 }
 
