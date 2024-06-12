@@ -81,13 +81,8 @@ resource "kubernetes_deployment" "postgres" {
           image = "postgres:13"
 
           env {
-            name = "POSTGRES_PASSWORD"
-            value_from {
-              secret_key_ref {
-                name = kubernetes_secret.postgres_secret.metadata[0].name
-                key  = "password"
-              }
-            }
+            name  = "POSTGRES_PASSWORD"
+            value = base64decode(kubernetes_secret.postgres_secret.data["password"])
           }
 
           env {
