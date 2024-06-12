@@ -17,15 +17,16 @@ resource "vultr_kubernetes" "k8" {
   }
 }
 
-resource "local_file" "kubeconfig" {
-  filename       = "${path.module}/kubeconfig.yaml"
-  content_base64 = vultr_kubernetes.k8.kube_config
-  depends_on     = [vultr_kubernetes.k8]
-}
+
 
 provider "kubernetes" {
-  alias       = "dynamic"
-  config_path = "${path.module}/kubeconfig.yaml"
+  alias = "dynamic"
+
+  host = "https://${vultr_kubernetes.k8.endpoint}:6443"
+
+  client_certificate     = base64decode(vultr_kubernetes.k8.client_certificate)
+  client_key             = base64decode(vultr_kubernetes.k8.client_key)
+  cluster_ca_certificate = base64decode(vultr_kubernetes.k8.cluster_ca_certificate)
 }
 
 resource "kubernetes_namespace" "infraservices" {
@@ -35,5 +36,15 @@ resource "kubernetes_namespace" "infraservices" {
     name = "infraservices"
   }
 
-  depends_on = [local_file.kubeconfig]
+  depends_on = [vultr_kubernetes.k8]
+}
+
+resource "kubernetes_namespace" "apps" {
+  provider = kubernetes.dynamic
+
+  metadata {
+    name = "apps"
+  }
+
+  depends_on = [vultr_kubernetes.k8]
 }
