@@ -152,7 +152,7 @@ resource "kubernetes_service" "postgres" {
     port {
       port        = 5432
       target_port = 5432
-      node_port   = 35432
+      node_port   = 30001
     }
   }
 }
