@@ -193,6 +193,7 @@ resource "helm_release" "argocd" {
 
 resource "helm_release" "mongodb" {
   name       = "mongodb"
+  namespace  = kubernetes_namespace.infraservices.metadata[0].name
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "mongodb"
   version    = "15.6.6"
