@@ -213,7 +213,8 @@ resource "helm_release" "mongodb" {
       storageClass: vultr-block-storage-hdd
 
     resourcesPreset: nano
-    arbiter.resourcesPreset: nano
+    arbiter:
+      resourcesPreset: nano
 
     architecture: replicaset
     replicaCount: 1
