@@ -229,3 +229,7 @@ resource "helm_release" "mongodb" {
 
 }
 
+
+data "vultr_kubernetes_node_pools" "nodepools" {
+  cluster_id = vultr_kubernetes.k8.id
+}
