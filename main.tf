@@ -189,6 +189,7 @@ resource "helm_release" "argocd" {
   name             = "argocd"
   namespace        = kubernetes_namespace.apps.metadata[0].name
   create_namespace = true
+  timeout          = "900s"
 
   repository = "https://argoproj.github.io/argo-helm"
   chart      = "argo-cd"
@@ -220,6 +221,7 @@ resource "helm_release" "mongodb" {
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "mongodb"
   version    = "15.6.6"
+  timeout    = "900s"
 
   values = [
     <<EOF
