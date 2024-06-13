@@ -45,7 +45,7 @@ resource "kubernetes_namespace" "infraservices" {
     name = "infraservices"
   }
 
-  depends_on = [vultr_kubernetes.k8]
+  depends_on = [vultr_kubernetes.k8, null_resource.wait_for_time]
 }
 
 resource "kubernetes_namespace" "apps" {
@@ -53,7 +53,7 @@ resource "kubernetes_namespace" "apps" {
     name = "apps"
   }
 
-  depends_on = [vultr_kubernetes.k8]
+  depends_on = [vultr_kubernetes.k8, null_resource.wait_for_time]
 }
 
 
