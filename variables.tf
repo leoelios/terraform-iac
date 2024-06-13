@@ -13,3 +13,10 @@ variable "postgres_password" {
   nullable    = false
   sensitive   = true
 }
+
+variable "argocd_admin_password" {
+  description = "ArgoCD admin password encrypted in Bcrypt algorithm (Default: 1234)"
+  nullable    = false
+  sensitive   = false
+  default     = "$2a$12$X02/Jug5WHV.1vpWqqwdmu.jOEcoMKB8cUaDQo6U5dnf./w3DVAqK"
+}

@@ -80,7 +80,7 @@ resource "helm_release" "argocd" {
     <<EOF
     configs:
       secret:
-        argocdServerAdminPassword: ad1234
+        argocdServerAdminPassword: ${var.argocd_admin_password}
     server:
       service:
         type: LoadBalancer
