@@ -109,6 +109,9 @@ resource "helm_release" "mongodb" {
     persistence:
       size: 200Gi
       storageClass: vultr-block-storage-hdd
+    
+    diagnosticMode:
+      enabled: true
 
     resourcesPreset: nano
     arbiter:
