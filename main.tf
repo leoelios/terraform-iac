@@ -97,35 +97,19 @@ resource "helm_release" "metrics_server" {
   version    = "3.12.1"
 }
 
-# resource "helm_release" "mongodb" {
-#   name       = "mongodb"
-#   namespace  = kubernetes_namespace.infraservices.metadata[0].name
-#   repository = "https://charts.bitnami.com/bitnami"
-#   chart      = "mongodb"
-#   version    = "15.6.5"
-#   timeout    = 900
+resource "helm_release" "nginx_ingress" {
+  name       = "nginx-ingress"
+  repository = "https://kubernetes.github.io/ingress-nginx"
+  chart      = "ingress-nginx"
+  namespace  = kubernetes_namespace.infraservices.metadata[0].name
 
-#   values = [
-#     <<EOF
-#     persistence:
-#       size: 200Gi
-#       storageClass: vultr-block-storage-hdd
+  set {
+    name  = "controller.replicaCount"
+    value = "2"
+  }
 
-#     diagnosticMode:
-#       enabled: true
-
-#     resourcesPreset: nano
-#     arbiter:
-#       resourcesPreset: nano
-
-#     architecture: standalone
-#     externalAccess:
-#       enabled: true
-#       service:
-#         type: NodePort
-#         nodePorts: 
-#           - 30004
-#     EOF
-#   ]
-
-# }
+  set {
+    name  = "controller.service.type"
+    value = "LoadBalancer"
+  }
+}
