@@ -78,11 +78,12 @@ resource "helm_release" "argocd" {
 
   values = [
     <<EOF
+    configs:
+      secret:
+        argocdServerAdminPassword: 1234
     server:
       service:
-        type: NodePort
-        nodePortHttp: 30002
-        nodePortHttps: 30003
+        type: LoadBalancer
     EOF
   ]
 
