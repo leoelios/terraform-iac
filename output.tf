@@ -17,6 +17,10 @@ output "argocd" {
   value = helm_release.argocd.metadata
 }
 
-output "node_external_ips" {
-  value = [for node in vultr_kubernetes.k8.node_pools[0].nodes[*] : node.external_ip]
+# output "node_external_ips" {
+#   value = [for node in vultr_kubernetes.k8.node_pools[0].nodes[*] : node.external_ip]
+# }
+
+output "nodes" {
+  value = vultr_kubernetes.k8.node_pools[0].nodes
 }

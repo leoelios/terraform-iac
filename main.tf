@@ -18,6 +18,20 @@ resource "vultr_kubernetes" "k8" {
   }
 }
 
+resource "null_resource" "wait_for_time" {
+  triggers = {
+    start_time = timestamp()
+  }
+
+  provisioner "local-exec" {
+    command = "sleep 100"
+  }
+
+  depends_on = [
+    vultr_kubernetes.k8
+  ]
+}
+
 provider "kubernetes" {
   host = "https://${vultr_kubernetes.k8.endpoint}:6443"
 
