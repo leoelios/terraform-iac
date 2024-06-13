@@ -114,7 +114,7 @@ resource "helm_release" "mongodb" {
     arbiter:
       resourcesPreset: nano
 
-    architecture: replicaset
+    architecture: standalone
     replicaCount: 1
     externalAccess:
       enabled: true
