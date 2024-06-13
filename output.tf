@@ -18,5 +18,5 @@ output "argocd" {
 }
 
 output "node_external_ips" {
-  value = [for node in data.vultr_kubernetes_node.nodepools.nodes : node.external_ip]
+  value = [for node in vultr_kubernetes_node.cluster_nodes[*] : node.external_ip]
 }
