@@ -101,7 +101,7 @@ resource "helm_release" "mongodb" {
   namespace  = kubernetes_namespace.infraservices.metadata[0].name
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "mongodb"
-  version    = "15.6.6"
+  version    = "15.6.5"
   timeout    = 900
 
   values = [
@@ -115,7 +115,6 @@ resource "helm_release" "mongodb" {
       resourcesPreset: nano
 
     architecture: standalone
-    replicaCount: 1
     externalAccess:
       enabled: true
       service:
