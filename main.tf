@@ -113,3 +113,17 @@ resource "helm_release" "nginx_ingress" {
     value = "LoadBalancer"
   }
 }
+
+
+resource "helm_release" "cert_manager" {
+  name       = "cert-manager"
+  repository = "https://charts.jetstack.io"
+  chart      = "cert-manager"
+  namespace  = kubernetes_namespace.infraservices.metadata[0].name
+  version    = "v1.14.6"
+
+  set {
+    name  = "installCRDs"
+    value = "true"
+  }
+}
