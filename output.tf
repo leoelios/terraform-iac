@@ -1,4 +1,6 @@
-data "kubernetes_nodes" "all" {}
+data "vultr_kubernetes_node_pools" "nodepools" {
+  cluster_id = vultr_kubernetes.k8.id
+}
 
 output "vultr_kube_config" {
   value     = vultr_kubernetes.k8.kube_config
@@ -18,8 +20,5 @@ output "argocd" {
 }
 
 output "node_external_ips" {
-  value = [
-    for node in data.kubernetes_nodes.all.nodes :
-    lookup({ for address in node.status[0].addresses : address.type => address.address }, "ExternalIP", "No ExternalIP")
-  ]
+  value = [for node in data.vultr_kubernetes_node.nodepools.nodes : node.external_ip]
 }
