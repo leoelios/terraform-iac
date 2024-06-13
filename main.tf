@@ -2,20 +2,23 @@ provider "vultr" {
   api_key = var.vultr_api_key
 }
 
+
 resource "vultr_kubernetes" "k8" {
   region  = "sao"
   label   = "vke-test"
   version = "v1.30.0+1"
-
-  node_pools {
-    node_quantity = 4
-    plan          = "vc2-1c-1gb-sc1"
-    label         = "vke-nodepool"
-    auto_scaler   = true
-    min_nodes     = 2
-    max_nodes     = 6
-  }
 }
+
+resource "vultr_kubernetes_node_pools" "cluster_nodes" {
+  node_quantity = 4
+  plan          = "vc2-1c-1gb-sc1"
+  label         = "vke-nodepool"
+  auto_scaler   = true
+  min_nodes     = 2
+  max_nodes     = 6
+  cluster_id    = vultr_kubernetes.k8.id
+}
+
 
 provider "kubernetes" {
   host = "https://${vultr_kubernetes.k8.endpoint}:6443"
@@ -227,8 +230,4 @@ resource "helm_release" "mongodb" {
     EOF
   ]
 
-}
-
-resource "vultr_kubernetes_node" "cluster_nodes" {
-  cluster_id = vultr_kubernetes_cluster.my_cluster.id
 }
