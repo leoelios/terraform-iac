@@ -7,16 +7,15 @@ resource "vultr_kubernetes" "k8" {
   region  = "sao"
   label   = "vke-test"
   version = "v1.30.0+1"
-}
 
-resource "vultr_kubernetes_node_pools" "cluster_nodes" {
-  node_quantity = 4
-  plan          = "vc2-1c-1gb-sc1"
-  label         = "vke-nodepool"
-  auto_scaler   = true
-  min_nodes     = 2
-  max_nodes     = 6
-  cluster_id    = vultr_kubernetes.k8.id
+  node_pools {
+    node_quantity = 4
+    plan          = "vc2-1c-1gb-sc1"
+    label         = "vke-nodepool"
+    auto_scaler   = true
+    min_nodes     = 2
+    max_nodes     = 6
+  }
 }
 
 provider "kubernetes" {
