@@ -24,7 +24,7 @@ resource "null_resource" "wait_for_time" {
   }
 
   provisioner "local-exec" {
-    command = "sleep 100"
+    command = "sleep 10"
   }
 
   depends_on = [
@@ -55,125 +55,6 @@ resource "kubernetes_namespace" "apps" {
 
   depends_on = [vultr_kubernetes.k8, null_resource.wait_for_time]
 }
-
-
-resource "kubernetes_secret" "postgres_secret" {
-  metadata {
-    name      = "postgres-secret"
-    namespace = kubernetes_namespace.infraservices.metadata[0].name
-  }
-
-  data = {
-    password = var.postgres_password
-  }
-}
-
-resource "kubernetes_deployment" "postgres" {
-  metadata {
-    name      = "postgres"
-    namespace = kubernetes_namespace.infraservices.metadata[0].name
-  }
-
-  spec {
-    replicas = 1
-
-    selector {
-      match_labels = {
-        app = "postgres"
-      }
-    }
-
-    template {
-      metadata {
-        labels = {
-          app = "postgres"
-        }
-      }
-
-      spec {
-        container {
-          name  = "postgres"
-          image = "postgres:13"
-
-          env {
-            name = "POSTGRES_PASSWORD"
-            value_from {
-              secret_key_ref {
-                name = kubernetes_secret.postgres_secret.metadata[0].name
-                key  = "password"
-              }
-            }
-          }
-
-          env {
-            name  = "PGDATA"
-            value = "/var/lib/postgresql/data/pgdata"
-          }
-
-          volume_mount {
-            name       = "postgres-data"
-            mount_path = "/var/lib/postgresql/data"
-          }
-
-          port {
-            container_port = 5432
-          }
-
-        }
-
-        volume {
-          name = "postgres-data"
-
-          persistent_volume_claim {
-            claim_name = kubernetes_persistent_volume_claim.postgres_pvc.metadata[0].name
-          }
-        }
-      }
-    }
-  }
-
-  depends_on = [kubernetes_secret.postgres_secret]
-}
-
-resource "kubernetes_persistent_volume_claim" "postgres_pvc" {
-  metadata {
-    name      = "postgres-pvc"
-    namespace = kubernetes_namespace.infraservices.metadata[0].name
-  }
-
-  spec {
-    access_modes       = ["ReadWriteOnce"]
-    storage_class_name = "vultr-block-storage-hdd"
-
-    resources {
-      requests = {
-        storage = "100Gi"
-      }
-    }
-  }
-}
-
-resource "kubernetes_service" "postgres" {
-  metadata {
-    name      = "postgres"
-    namespace = kubernetes_namespace.infraservices.metadata[0].name
-  }
-
-  spec {
-    selector = {
-      app = "postgres"
-    }
-
-    type = "NodePort"
-
-    port {
-      port        = 5432
-      target_port = 5432
-      node_port   = 30001
-    }
-  }
-}
-
 
 provider "helm" {
   kubernetes {
