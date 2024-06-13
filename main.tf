@@ -96,35 +96,35 @@ resource "helm_release" "metrics_server" {
   version    = "3.12.1"
 }
 
-resource "helm_release" "mongodb" {
-  name       = "mongodb"
-  namespace  = kubernetes_namespace.infraservices.metadata[0].name
-  repository = "https://charts.bitnami.com/bitnami"
-  chart      = "mongodb"
-  version    = "15.6.5"
-  timeout    = 900
+# resource "helm_release" "mongodb" {
+#   name       = "mongodb"
+#   namespace  = kubernetes_namespace.infraservices.metadata[0].name
+#   repository = "https://charts.bitnami.com/bitnami"
+#   chart      = "mongodb"
+#   version    = "15.6.5"
+#   timeout    = 900
 
-  values = [
-    <<EOF
-    persistence:
-      size: 200Gi
-      storageClass: vultr-block-storage-hdd
-    
-    diagnosticMode:
-      enabled: true
+#   values = [
+#     <<EOF
+#     persistence:
+#       size: 200Gi
+#       storageClass: vultr-block-storage-hdd
 
-    resourcesPreset: nano
-    arbiter:
-      resourcesPreset: nano
+#     diagnosticMode:
+#       enabled: true
 
-    architecture: standalone
-    externalAccess:
-      enabled: true
-      service:
-        type: NodePort
-        nodePorts: 
-          - 30004
-    EOF
-  ]
+#     resourcesPreset: nano
+#     arbiter:
+#       resourcesPreset: nano
 
-}
+#     architecture: standalone
+#     externalAccess:
+#       enabled: true
+#       service:
+#         type: NodePort
+#         nodePorts: 
+#           - 30004
+#     EOF
+#   ]
+
+# }
