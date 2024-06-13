@@ -19,7 +19,7 @@ output "argocd" {
 
 output "node_external_ips" {
   value = [
-    for node in data.kubernetes_nodes.all.items : 
-    lookup({for address in node.status[0].addresses : address.type => address.address}, "ExternalIP", "No ExternalIP")
+    for node in data.kubernetes_nodes.all.nodes :
+    lookup({ for address in node.status[0].addresses : address.type => address.address }, "ExternalIP", "No ExternalIP")
   ]
 }
