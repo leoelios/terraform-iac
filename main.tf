@@ -239,6 +239,7 @@ resource "helm_release" "mongodb" {
         type: NodePort
         nodePorts: 
           - 30004
+          - 30005
     EOF
   ]
 
