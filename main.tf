@@ -19,7 +19,6 @@ resource "vultr_kubernetes_node_pools" "cluster_nodes" {
   cluster_id    = vultr_kubernetes.k8.id
 }
 
-
 provider "kubernetes" {
   host = "https://${vultr_kubernetes.k8.endpoint}:6443"
 
