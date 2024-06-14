@@ -20,3 +20,8 @@ variable "argocd_admin_password" {
   sensitive   = false
   default     = "$2a$12$X02/Jug5WHV.1vpWqqwdmu.jOEcoMKB8cUaDQo6U5dnf./w3DVAqK"
 }
+
+variable "tls_certificate_email" {
+  description = "E-mail for generating TLS certificates in Let's encrypt"
+  nullable    = false
+}
