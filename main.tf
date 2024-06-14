@@ -159,7 +159,7 @@ resource "kubernetes_manifest" "letsencrypt_issuer" {
 resource "kubernetes_ingress" "infraservices_ingress" {
   metadata {
     name      = "infraservices-ingress"
-    namespace = kubernetes_namespace.example.metadata[0].name
+    namespace = kubernetes_namespace.infraservices.metadata[0].name
     annotations = {
       "kubernetes.io/ingress.class"              = "nginx"
       "cert-manager.io/cluster-issuer"           = "letsencrypt-prod"
