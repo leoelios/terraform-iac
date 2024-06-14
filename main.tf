@@ -144,6 +144,7 @@ resource "kubernetes_manifest" "letsencrypt_issuer" {
 }
 
 resource "kubernetes_ingress_v1" "apps_ingress" {
+
   metadata {
     name      = "apps-ingress"
     namespace = kubernetes_namespace.apps.metadata[0].name
@@ -170,7 +171,7 @@ resource "kubernetes_ingress_v1" "apps_ingress" {
             service {
               name = "argocd-server"
               port {
-                name = "https"
+                number = 80
               }
             }
           }
