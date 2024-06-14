@@ -170,7 +170,7 @@ resource "kubernetes_ingress_v1" "apps_ingress" {
             service {
               name = "argocd-server"
               port {
-                name = "http"
+                name = "https"
               }
             }
           }
