@@ -161,7 +161,6 @@ resource "kubernetes_ingress" "infraservices_ingress" {
     name      = "infraservices-ingress"
     namespace = kubernetes_namespace.infraservices.metadata[0].name
     annotations = {
-      "kubernetes.io/ingress.class"              = "nginx"
       "cert-manager.io/cluster-issuer"           = "letsencrypt-prod"
       "nginx.ingress.kubernetes.io/ssl-redirect" = "true"
     }
