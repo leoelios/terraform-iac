@@ -18,20 +18,6 @@ resource "vultr_kubernetes" "k8" {
   }
 }
 
-resource "null_resource" "wait_for_time" {
-  triggers = {
-    start_time = timestamp()
-  }
-
-  provisioner "local-exec" {
-    command = "sleep 10"
-  }
-
-  depends_on = [
-    vultr_kubernetes.k8
-  ]
-}
-
 provider "kubernetes" {
   host = "https://${vultr_kubernetes.k8.endpoint}:6443"
 
@@ -45,7 +31,7 @@ resource "kubernetes_namespace" "infraservices" {
     name = "infraservices"
   }
 
-  depends_on = [vultr_kubernetes.k8, null_resource.wait_for_time]
+  depends_on = [vultr_kubernetes.k8]
 }
 
 resource "kubernetes_namespace" "apps" {
@@ -53,7 +39,7 @@ resource "kubernetes_namespace" "apps" {
     name = "apps"
   }
 
-  depends_on = [vultr_kubernetes.k8, null_resource.wait_for_time]
+  depends_on = [vultr_kubernetes.k8]
 }
 
 provider "helm" {
