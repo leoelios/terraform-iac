@@ -108,10 +108,6 @@ resource "helm_release" "nginx_ingress" {
     value = "2"
   }
 
-  set {
-    name  = "controller.service.type"
-    value = "LoadBalancer"
-  }
 }
 
 
