@@ -156,7 +156,7 @@ resource "kubernetes_manifest" "letsencrypt_issuer" {
   }
 }
 
-resource "kubernetes_ingress" "infraservices_ingress" {
+resource "kubernetes_ingress_v1" "infraservices_ingress" {
   metadata {
     name      = "infraservices-ingress"
     namespace = kubernetes_namespace.infraservices.metadata[0].name
@@ -176,8 +176,14 @@ resource "kubernetes_ingress" "infraservices_ingress" {
         path {
           path = "/"
           backend {
-            service_name = helm_release.argocd.name
-            service_port = "http"
+
+            service {
+              name = helm_release.argocd.name
+              port {
+                number = "http"
+              }
+            }
+
           }
         }
       }
