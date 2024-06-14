@@ -153,15 +153,19 @@ resource "kubernetes_ingress_v1" "apps_ingress" {
     }
   }
   spec {
+    ingress_class_name = "nginx"
+
     tls {
       hosts       = ["argocd.vava.win"]
       secret_name = "apps-ingress-secret"
     }
+
     rule {
       host = "argocd.vava.win"
+
       http {
         path {
-          path = "/"
+          path = "/*"
           backend {
             service {
               name = "argocd-server"
