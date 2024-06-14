@@ -180,7 +180,7 @@ resource "kubernetes_ingress_v1" "infraservices_ingress" {
             service {
               name = helm_release.argocd.name
               port {
-                number = "http"
+                number = 80
               }
             }
 
