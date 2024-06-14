@@ -155,3 +155,33 @@ resource "kubernetes_manifest" "letsencrypt_issuer" {
     }
   }
 }
+
+resource "kubernetes_ingress" "infraservices_ingress" {
+  metadata {
+    name      = "infraservices-ingress"
+    namespace = kubernetes_namespace.example.metadata[0].name
+    annotations = {
+      "kubernetes.io/ingress.class"              = "nginx"
+      "cert-manager.io/cluster-issuer"           = "letsencrypt-prod"
+      "nginx.ingress.kubernetes.io/ssl-redirect" = "true"
+    }
+  }
+  spec {
+    tls {
+      hosts       = ["argocd.vava.win"]
+      secret_name = "infraservices-ingress-secret"
+    }
+    rule {
+      host = "argocd.vava.win"
+      http {
+        path {
+          path = "/"
+          backend {
+            service_name = helm_release.argocd.name
+            service_port = "http"
+          }
+        }
+      }
+    }
+  }
+}
