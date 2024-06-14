@@ -148,8 +148,7 @@ resource "kubernetes_ingress_v1" "apps_ingress" {
     name      = "apps-ingress"
     namespace = kubernetes_namespace.apps.metadata[0].name
     annotations = {
-      "cert-manager.io/cluster-issuer"           = "letsencrypt-prod"
-      "nginx.ingress.kubernetes.io/ssl-redirect" = "true"
+      "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
     }
   }
   spec {
@@ -165,12 +164,13 @@ resource "kubernetes_ingress_v1" "apps_ingress" {
 
       http {
         path {
-          path = "/*"
+          path      = "/"
+          path_type = "Prefix"
           backend {
             service {
               name = "argocd-server"
               port {
-                name = "https"
+                name = "http"
               }
             }
           }
