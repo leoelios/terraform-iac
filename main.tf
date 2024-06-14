@@ -154,6 +154,8 @@ resource "kubernetes_manifest" "letsencrypt_issuer" {
       }
     }
   }
+
+  depends_on = [vultr_kubernetes.k8]
 }
 
 resource "kubernetes_ingress_v1" "infraservices_ingress" {
@@ -189,4 +191,5 @@ resource "kubernetes_ingress_v1" "infraservices_ingress" {
       }
     }
   }
+
 }
