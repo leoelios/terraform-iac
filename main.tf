@@ -178,6 +178,25 @@ resource "kubernetes_ingress_v1" "apps_ingress" {
         }
       }
     }
+
+    rule {
+      host = "testing.vava.win"
+
+      http {
+        path {
+          path      = "/"
+          path_type = "Prefix"
+          backend {
+            service {
+              name = "kuard"
+              port {
+                number = 80
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
 }
