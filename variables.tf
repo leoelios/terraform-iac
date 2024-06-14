@@ -1,7 +1,6 @@
 # Copyright (c) HashiCorp, Inc.
 # SPDX-License-Identifier: MPL-2.0
 
-
 variable "vultr_api_key" {
   description = "VULTR Api key for K8S cluster creation"
   sensitive   = true
@@ -24,4 +23,9 @@ variable "argocd_admin_password" {
 variable "tls_certificate_email" {
   description = "E-mail for generating TLS certificates in Let's encrypt"
   nullable    = false
+}
+
+variable "enable_letsencrypt" {
+  default     = false
+  description = "Defines if letsencrypted issuer must be registered"
 }

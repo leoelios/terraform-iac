@@ -129,7 +129,8 @@ resource "helm_release" "cert_manager" {
 }
 
 resource "kubernetes_manifest" "letsencrypt_issuer" {
-  count = length(vultr_kubernetes.k8.id) > 0 ? 1 : 0
+
+  count = var.enable_letsencrypt ? 1 : 0
 
   manifest = {
     apiVersion = "cert-manager.io/v1"
