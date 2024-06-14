@@ -143,9 +143,9 @@ resource "kubernetes_manifest" "letsencrypt_issuer" {
   depends_on = [vultr_kubernetes.k8]
 }
 
-resource "kubernetes_ingress_v1" "infraservices_ingress" {
+resource "kubernetes_ingress_v1" "apps_ingress" {
   metadata {
-    name      = "infraservices-ingress"
+    name      = "apps-ingress"
     namespace = kubernetes_namespace.apps.metadata[0].name
     annotations = {
       "cert-manager.io/cluster-issuer"           = "letsencrypt-prod"
@@ -155,7 +155,7 @@ resource "kubernetes_ingress_v1" "infraservices_ingress" {
   spec {
     tls {
       hosts       = ["argocd.vava.win"]
-      secret_name = "infraservices-ingress-secret"
+      secret_name = "apps-ingress-secret"
     }
     rule {
       host = "argocd.vava.win"
@@ -163,14 +163,12 @@ resource "kubernetes_ingress_v1" "infraservices_ingress" {
         path {
           path = "/"
           backend {
-
             service {
               name = "argocd-server"
               port {
-                number = 80
+                name = "https"
               }
             }
-
           }
         }
       }
