@@ -183,7 +183,7 @@ resource "kubernetes_ingress_v1" "infraservices_ingress" {
           backend {
 
             service {
-              name = helm_release.argocd.name
+              name = "argocd-server"
               port {
                 number = 80
               }
