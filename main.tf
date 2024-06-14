@@ -164,7 +164,7 @@ resource "kubernetes_manifest" "letsencrypt_issuer" {
 resource "kubernetes_ingress_v1" "infraservices_ingress" {
   metadata {
     name      = "infraservices-ingress"
-    namespace = kubernetes_namespace.infraservices.metadata[0].name
+    namespace = kubernetes_namespace.apps.metadata[0].name
     annotations = {
       "cert-manager.io/cluster-issuer"           = "letsencrypt-prod"
       "nginx.ingress.kubernetes.io/ssl-redirect" = "true"
@@ -183,7 +183,7 @@ resource "kubernetes_ingress_v1" "infraservices_ingress" {
           backend {
 
             service {
-              name = "${helm_release.argocd.name}.${helm_release.argocd.namespace}.svc.cluster.local"
+              name = helm_release.argocd.name
               port {
                 number = 80
               }
