@@ -69,7 +69,7 @@ resource "helm_release" "argocd" {
         argocdServerAdminPassword: ${var.argocd_admin_password}
     server:
       service:
-        type: LoadBalancer
+        type: ClusterIP
     EOF
   ]
 
