@@ -151,9 +151,7 @@ resource "kubernetes_ingress_v1" "apps_ingress" {
     name      = "apps-ingress"
     namespace = kubernetes_namespace.apps.metadata[0].name
     annotations = {
-      "cert-manager.io/cluster-issuer"                 = "letsencrypt-prod"
-      "nginx.ingress.kubernetes.io/force-ssl-redirect" = "true"
-      "nginx.ingress.kubernetes.io/backend-protocol"   = "HTTP"
+      "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
     }
   }
   spec {
