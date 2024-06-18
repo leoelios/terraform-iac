@@ -66,7 +66,8 @@ resource "helm_release" "argocd" {
     <<EOF
     configs:
       params:
-        server.insecure: true
+        server:
+          insecure: true
       secret:
         argocdServerAdminPassword: ${var.argocd_admin_password}
     server:
@@ -97,7 +98,6 @@ resource "helm_release" "nginx_ingress" {
   }
 
 }
-
 
 resource "helm_release" "cert_manager" {
   name       = "cert-manager"
@@ -181,24 +181,6 @@ resource "kubernetes_ingress_v1" "apps_ingress" {
       }
     }
 
-    rule {
-      host = "testing.vava.win"
-
-      http {
-        path {
-          path      = "/"
-          path_type = "Prefix"
-          backend {
-            service {
-              name = "kuard"
-              port {
-                number = 80
-              }
-            }
-          }
-        }
-      }
-    }
   }
 
 }
