@@ -158,7 +158,7 @@ resource "kubernetes_ingress_v1" "apps_ingress" {
     ingress_class_name = "nginx"
 
     tls {
-      hosts       = ["argocd.vava.win", "testing.vava.win"]
+      hosts       = ["argocd.vava.win"]
       secret_name = "apps-ingress-secret"
     }
 
