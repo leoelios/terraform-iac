@@ -52,6 +52,15 @@ provider "helm" {
   }
 }
 
+resource "helm_release" "postgres" {
+  name      = "postgres"
+  namespace = kubernetes_namespace.infraservices.metadata[0].name
+
+  repository = "https://charts.bitnami.com/bitnami"
+  chart      = "bitnami/postgresql"
+  version    = "15.5.7"
+}
+
 resource "helm_release" "argocd" {
   name             = "argocd"
   namespace        = kubernetes_namespace.apps.metadata[0].name
@@ -146,6 +155,8 @@ resource "kubernetes_manifest" "letsencrypt_issuer" {
 }
 
 resource "kubernetes_ingress_v1" "apps_ingress" {
+
+  depends_on = [helm_release.nginx_ingress, kubernetes_manifest.letsencrypt_issuer]
 
   metadata {
     name      = "apps-ingress"
