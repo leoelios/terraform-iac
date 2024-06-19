@@ -75,8 +75,7 @@ resource "helm_release" "argocd" {
     <<EOF
     configs:
       params:
-        server:
-          insecure: true
+        server.insecure: true
       secret:
         argocdServerAdminPassword: ${var.argocd_admin_password}
     server:
