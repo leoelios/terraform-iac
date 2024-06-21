@@ -104,7 +104,7 @@ resource "helm_release" "nginx_ingress" {
 
   set {
     name  = "controller.extraArgs.tcp-services-configmap"
-    value = "ingress-nginx/tcp-services"
+    value = "infraservices/tcp-services"
   }
 
 }
