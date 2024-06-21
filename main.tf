@@ -187,26 +187,6 @@ resource "kubernetes_ingress_v1" "apps_ingress" {
 
 }
 
-resource "kubernetes_service" "infraservices_loadbalancer" {
-  metadata {
-    name      = "infraservices-loadbalancer"
-    namespace = "infraservices"
-  }
-
-  spec {
-    type = "LoadBalancer"
-
-    port {
-      name        = "mongodb"
-      port        = "27017"
-      target_port = "27017"
-    }
-
-    selector = {
-      "app.kubernetes.io/name" = "mongodb"
-    }
-  }
-}
 
 data "kubernetes_service" "infraservices_lb_data" {
   metadata {
@@ -239,8 +219,7 @@ resource "helm_release" "mongodb" {
       }
 
       service = {
-        type           = "LoadBalancer"
-        loadBalancerIP = data.kubernetes_service.infraservices_lb_data.spec[0].load_balancer_ip
+        type = "NodeIP"
       }
 
       auth = {
