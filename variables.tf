@@ -57,3 +57,14 @@ variable "mongodb_storage_size" {
   type        = string
   default     = "100Gi"
 }
+
+variable "postgre_postgres_password" {
+  description = "PostgreSQL password for postgres user"
+  type        = string
+}
+
+variable "postgres_storage_size" {
+  description = "PostgreSQL storage size"
+  type        = string
+  default     = "100Gi"
+}

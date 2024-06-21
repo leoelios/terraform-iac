@@ -109,6 +109,7 @@ resource "helm_release" "nginx_ingress" {
 
       tcp = {
         "27017" = "infraservices/mongodb:27017"
+        "5432"  = "infraservices/postgre:5432"
       }
     })
   ]
@@ -203,7 +204,6 @@ resource "kubernetes_ingress_v1" "apps_ingress" {
 }
 
 resource "helm_release" "mongodb" {
-
   name       = "mongodb"
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "mongodb"
@@ -233,6 +233,32 @@ resource "helm_release" "mongodb" {
         size         = var.mongodb_storage_size
         storageClass = "vultr-block-storage-hdd"
       }
+    })
+  ]
+}
+
+resource "helm_release" "postgre" {
+  name       = "postgre"
+  repository = "https://charts.bitnami.com/bitnami"
+  chart      = "postgresql"
+  namespace  = kubernetes_namespace.infraservices.metadata[0].name
+  version    = "15.5.9"
+
+  values = [
+    yamlencode({
+
+      auth = {
+        postgresPassword = var.postgre_postgres_password
+      }
+
+      primary = {
+        resourcesPreset = "micro"
+        persistence = {
+          size         = var.postgres_storage_size
+          storageClass = "vultr-block-storage-hdd"
+        }
+      }
+
     })
   ]
 }
