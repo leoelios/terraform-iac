@@ -92,21 +92,21 @@ resource "helm_release" "nginx_ingress" {
   chart      = "ingress-nginx"
   namespace  = kubernetes_namespace.infraservices.metadata[0].name
 
-  set {
-    name  = "controller.replicaCount"
-    value = "2"
-  }
+  values = [
+    yamlencode({
+      controller = {
+        replicaCount = "2"
 
-  set {
-    name  = "controller.config.enable-vts-status"
-    value = true
-  }
+        config = {
+          "enable-vts-status" = true
+        }
 
-  set {
-    name  = "controller.extraArgs.tcp-services-configmap"
-    value = "infraservices/tcp-services"
-  }
-
+        tcp = {
+          "27017" = "infraservices/mongodb:27017"
+        }
+      }
+    })
+  ]
 }
 
 resource "helm_release" "cert_manager" {
