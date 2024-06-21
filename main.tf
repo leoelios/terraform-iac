@@ -189,8 +189,6 @@ resource "kubernetes_ingress_v1" "apps_ingress" {
 
 resource "helm_release" "mongodb" {
 
-  depends_on = [kubernetes_service.infraservices_loadbalancer]
-
   name       = "mongodb"
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "mongodb"
