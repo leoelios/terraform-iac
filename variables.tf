@@ -51,3 +51,9 @@ variable "mongodb_database" {
   description = "Database name for MongoDB"
   type        = string
 }
+
+variable "mongodb_storage_size" {
+  description = "Mongodb storage size"
+  type        = string
+  default     = "100Gi"
+}

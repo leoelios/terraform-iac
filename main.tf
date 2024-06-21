@@ -203,6 +203,10 @@ resource "helm_release" "mongodb" {
         password     = var.mongodb_password
         database     = var.mongodb_database
       }
+      persistence = {
+        size         = var.mongodb_storage_size
+        storageClass = "vultr-block-storage-hdd"
+      }
     })
   ]
 }
