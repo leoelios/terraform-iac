@@ -95,15 +95,20 @@ resource "helm_release" "nginx_ingress" {
   values = [
     yamlencode({
       controller = {
-        replicaCount = "2"
+        replicaCount       = "2"
+        configMapNamespace = kubernetes_namespace.infraservices.metadata[0].name
 
         config = {
           "enable-vts-status" = true
         }
 
         tcp = {
-          "27017" = "infraservices/mongodb:27017"
+          configMapNamespace = kubernetes_namespace.infraservices.metadata[0].name
         }
+      }
+
+      tcp = {
+        "27017" = "infraservices/mongodb:27017"
       }
     })
   ]
