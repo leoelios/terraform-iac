@@ -196,6 +196,12 @@ resource "kubernetes_service" "infraservices_loadbalancer" {
   spec {
     type = "LoadBalancer"
 
+    port {
+      name        = "mongodb"
+      port        = "27017"
+      target_port = "27017"
+    }
+
     selector = {
       "app.kubernetes.io/name" = "mongodb"
     }
