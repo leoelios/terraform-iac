@@ -20,3 +20,7 @@ output "argocd" {
 output "nodes" {
   value = vultr_kubernetes.k8.node_pools[0].nodes
 }
+
+output "load_balancer_hostname" {
+  value = kubernetes_ingress_v1.infraservices_ingress.status.0.load_balancer.0.ingress.0.hostname
+}

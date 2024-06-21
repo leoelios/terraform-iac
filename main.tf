@@ -220,3 +220,45 @@ resource "helm_release" "mongodb" {
     })
   ]
 }
+
+
+resource "kubernetes_ingress_v1" "infraservices_ingress" {
+
+  depends_on = [helm_release.nginx_ingress, kubernetes_manifest.letsencrypt_issuer]
+
+  metadata {
+    name      = "infraservices-ingress"
+    namespace = kubernetes_namespace.infraservices.metadata[0].name
+    annotations = {
+      "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
+    }
+  }
+  spec {
+    ingress_class_name = "nginx"
+
+    tls {
+      hosts       = ["mongodb.vava.win"]
+      secret_name = "infraservices-ingress-secret"
+    }
+
+    rule {
+      host = "mongodb.vava.win"
+
+      http {
+        path {
+          path = "/*"
+          backend {
+            service {
+              name = "mongodb"
+              port {
+                number = 27017
+              }
+            }
+          }
+        }
+      }
+    }
+
+  }
+
+}
