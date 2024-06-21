@@ -208,7 +208,7 @@ resource "helm_release" "mongodb" {
       }
 
       service = {
-        type = "NodeIP"
+        type = "NodePort"
       }
 
       auth = {
