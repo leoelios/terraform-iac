@@ -29,3 +29,25 @@ variable "enable_letsencrypt" {
   default     = false
   description = "Defines if letsencrypted issuer must be registered"
 }
+
+variable "mongodb_root_password" {
+  description = "Root password for MongoDB"
+  type        = string
+  sensitive   = true
+}
+
+variable "mongodb_username" {
+  description = "Username for MongoDB"
+  type        = string
+}
+
+variable "mongodb_password" {
+  description = "Password for MongoDB"
+  type        = string
+  sensitive   = true
+}
+
+variable "mongodb_database" {
+  description = "Database name for MongoDB"
+  type        = string
+}
