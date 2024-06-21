@@ -97,6 +97,16 @@ resource "helm_release" "nginx_ingress" {
     value = "2"
   }
 
+  set {
+    name  = "controller.config.enable-vts-status"
+    value = true
+  }
+
+  set {
+    name  = "controller.extraArgs.tcp-services-configmap"
+    value = "ingress-nginx/tcp-services"
+  }
+
 }
 
 resource "helm_release" "cert_manager" {
@@ -207,10 +217,6 @@ resource "helm_release" "mongodb" {
         resourcesPreset = "micro"
       }
 
-      service = {
-        type = "NodePort"
-      }
-
       auth = {
         enabled      = true
         rootPassword = var.mongodb_root_password
@@ -226,3 +232,15 @@ resource "helm_release" "mongodb" {
   ]
 }
 
+resource "kubernetes_config_map" "tcp_services" {
+  depends_on = [helm_release.mongodb]
+
+  metadata {
+    name      = "tcp-services"
+    namespace = kubernetes_namespace.infraservices.metadata[0].name
+  }
+
+  data = {
+    "27017" = "infraservices/mongodb:27017"
+  }
+}
