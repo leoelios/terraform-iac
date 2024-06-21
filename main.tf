@@ -196,10 +196,14 @@ resource "helm_release" "mongodb" {
 
   values = [
     yamlencode({
-      resourcesPreset = "nano"
+      resourcesPreset = "micro"
 
       arbiter = {
-        resourcesPreset = "nano"
+        resourcesPreset = "micro"
+      }
+
+      hidden = {
+        resourcesPreset = "micro"
       }
 
       auth = {
