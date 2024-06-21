@@ -238,7 +238,7 @@ resource "kubernetes_service" "infraservices_loadbalancer" {
     }
 
     selector = {
-      app = "app.kubernetes.io/component=mongodb"
+      app = "mongodb"
     }
   }
 }
