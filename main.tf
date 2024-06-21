@@ -232,12 +232,6 @@ resource "kubernetes_service" "infraservices_loadbalancer" {
     type = "LoadBalancer"
 
     port {
-      name        = "postgres"
-      port        = 5432
-      target_port = 5432
-    }
-
-    port {
       name        = "mongodb"
       port        = 27017
       target_port = 27017
