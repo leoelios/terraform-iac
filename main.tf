@@ -196,7 +196,6 @@ resource "helm_release" "mongodb" {
 
   values = [
     yamlencode({
-      nodeSelector    = "infraservices-resource"
       resourcesPreset = "micro"
 
       arbiter = {
@@ -239,7 +238,7 @@ resource "kubernetes_service" "infraservices_loadbalancer" {
     }
 
     selector = {
-      app = "infraservices-resource"
+      app = "app.kubernetes.io/component=mongodb"
     }
   }
 }
