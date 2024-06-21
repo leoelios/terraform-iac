@@ -187,15 +187,6 @@ resource "kubernetes_ingress_v1" "apps_ingress" {
 
 }
 
-
-data "kubernetes_service" "infraservices_lb_data" {
-  metadata {
-    name      = kubernetes_service.infraservices_loadbalancer.metadata[0].name
-    namespace = kubernetes_service.infraservices_loadbalancer.metadata[0].namespace
-  }
-}
-
-
 resource "helm_release" "mongodb" {
 
   depends_on = [kubernetes_service.infraservices_loadbalancer]
