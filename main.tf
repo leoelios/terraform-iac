@@ -73,6 +73,15 @@ resource "helm_release" "argocd" {
     server:
       service:
         type: ClusterIP
+
+    server:
+      resources: 
+        limits:
+          cpu: 500m
+          memory: 512Mi
+        requests:
+          cpu: 300m
+          memory: 256Mi
     EOF
   ]
 
