@@ -77,10 +77,28 @@ resource "helm_release" "argocd" {
     server:
       resources: 
         limits:
-          cpu: 500m
+          cpu: 300m
           memory: 512Mi
         requests:
+          cpu: 256m
+          memory: 256Mi
+
+    controller:
+      resources: 
+        limits:
           cpu: 300m
+          memory: 256Mi
+        requests:
+          cpu: 256m
+          memory: 256Mi
+
+    repoServer:
+      resources: 
+        limits:
+          cpu: 300m
+          memory: 256Mi
+        requests:
+          cpu: 256m
           memory: 256Mi
     EOF
   ]
@@ -93,6 +111,14 @@ resource "helm_release" "metrics_server" {
   chart      = "metrics-server"
   namespace  = "kube-system"
   version    = "3.12.1"
+
+  values = [
+    <<EOF
+      resources:
+        cpu: 200m
+        memory: 300Mi
+    EOF
+  ]
 }
 
 resource "helm_release" "nginx_ingress" {
