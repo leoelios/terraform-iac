@@ -9,12 +9,12 @@ resource "vultr_kubernetes" "k8" {
   version = "v1.30.0+1"
 
   node_pools {
-    node_quantity = 5
-    plan          = "vc2-1c-1gb-sc1"
+    node_quantity = 2
+    plan          = "vc2-2c-4gb-sc1"
     label         = "vke-nodepool"
     auto_scaler   = true
-    min_nodes     = 4
-    max_nodes     = 6
+    min_nodes     = 1
+    max_nodes     = 3
   }
 }
 
