@@ -109,7 +109,7 @@ resource "helm_release" "nginx_ingress" {
 
       tcp = {
         "27017" = "infraservices/mongodb:27017"
-        "5432"  = "infraservices/postgre:5432"
+        "5432"  = "infraservices/postgre-postgresql:5432"
       }
     })
   ]
@@ -273,6 +273,6 @@ resource "kubernetes_config_map" "tcp_services" {
 
   data = {
     "27017" = "infraservices/mongodb:27017"
-    "5432"  = "infraservices/postgre:5432"
+    "5432"  = "infraservices/postgre-postgresql:5432"
   }
 }
