@@ -273,5 +273,6 @@ resource "kubernetes_config_map" "tcp_services" {
 
   data = {
     "27017" = "infraservices/mongodb:27017"
+    "5432"  = "infraservices/postgre:5432"
   }
 }
