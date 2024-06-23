@@ -1,14 +1,9 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: docker-registry
-
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: registry-pv
-  namespace: docker-registry
+  namespace: infraservices
 spec:
   storageClass: vultr-block-storage-hdd
   capacity:
@@ -22,7 +17,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: registry-pvc
-  namespace: docker-registry
+  namespace: infraservices
 spec:
   storageClass: vultr-block-storage-hdd
   accessModes:
@@ -35,7 +30,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: registry-service
-  namespace: docker-registry
+  namespace: infraservices
 spec:
   ports:
     - port: 5000
@@ -47,7 +42,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: registry-deployment
-  namespace: docker-registry
+  namespace: infraservices
 spec:
   replicas: 1
   selector:
