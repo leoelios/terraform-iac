@@ -311,3 +311,10 @@ resource "kubernetes_config_map" "tcp_services" {
     "5432"  = "infraservices/postgre-postgresql:5432"
   }
 }
+
+resource "kubernetes_manifest" "docker_registry" {
+  manifest = yamldecode(file("${path.module}/docker-registry.yaml"))
+  depends_on = [
+    vultr_kubernetes.k8
+  ]
+}
