@@ -338,6 +338,7 @@ resource "kubernetes_service" "registry_service" {
     labels = {
       app = "docker-registry"
     }
+    namespace = kubernetes_namespace.infraservices.metadata[0].name
   }
 
   spec {
