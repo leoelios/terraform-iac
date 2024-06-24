@@ -68,3 +68,17 @@ variable "postgres_storage_size" {
   type        = string
   default     = "100Gi"
 }
+
+variable "registry_user" {
+  description = "Docker registry auth user"
+  type        = string
+  nullable    = false
+  sensitive   = false
+}
+
+variable "registry_password" {
+  description = "Docker registry auth password"
+  type        = string
+  nullable    = false
+  sensitive   = true
+}
