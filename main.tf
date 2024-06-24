@@ -313,9 +313,7 @@ resource "kubernetes_config_map" "tcp_services" {
 }
 
 resource "kubernetes_manifest" "docker_registry" {
-  manifest = <<EOF
-      ${file("docker-registry.yaml")}
-    EOF
+  manifest = yamldecode(file("docker-registry.yaml"))
   depends_on = [
     vultr_kubernetes.k8
   ]
