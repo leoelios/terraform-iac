@@ -135,7 +135,7 @@ resource "helm_release" "nginx_ingress" {
 
         config = {
           "enable-vts-status"    = true
-          "client-max-body-size" = "2g"
+          "client-max-body-size" = "300m"
         }
 
         tcp = {
