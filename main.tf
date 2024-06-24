@@ -403,7 +403,7 @@ resource "kubernetes_deployment" "docker_registry" {
           command = [
             "sh",
             "-c",
-            "apk add --no-cache apache2-utils && htpasswd -bc /auth/htpasswd ${var.registry_user} ${var.registry_password}"
+            "apk add --no-cache apache2-utils && htpasswd -Bcb /auth/htpasswd ${var.registry_user} ${var.registry_password}"
           ]
 
           volume_mount {
@@ -437,7 +437,7 @@ resource "kubernetes_deployment" "docker_registry" {
 
           env {
             name  = "REGISTRY_AUTH_HTPASSWD_REALM"
-            value = "Registry Realm"
+            value = "Registry"
           }
 
           env {
