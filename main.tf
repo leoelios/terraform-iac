@@ -440,3 +440,45 @@ resource "kubernetes_deployment" "docker_registry" {
     }
   }
 }
+
+resource "kubernetes_ingress_v1" "registry_ingress" {
+
+  depends_on = [helm_release.nginx_ingress, kubernetes_manifest.letsencrypt_issuer]
+
+  metadata {
+    name      = "registry-ingress"
+    namespace = kubernetes_namespace.apps.metadata[0].name
+    annotations = {
+      "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
+    }
+  }
+  spec {
+    ingress_class_name = "nginx"
+
+    tls {
+      hosts       = ["registry.vava.win"]
+      secret_name = "registry-ingress-secret"
+    }
+
+    rule {
+      host = "registry.vava.win"
+
+      http {
+        path {
+          path      = "/"
+          path_type = "Prefix"
+          backend {
+            service {
+              name = "registry"
+              port {
+                number = 5000
+              }
+            }
+          }
+        }
+      }
+    }
+
+  }
+
+}
