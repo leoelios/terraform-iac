@@ -447,7 +447,7 @@ resource "kubernetes_ingress_v1" "registry_ingress" {
 
   metadata {
     name      = "registry-ingress"
-    namespace = kubernetes_namespace.apps.metadata[0].name
+    namespace = kubernetes_namespace.infraservices.metadata[0].name
     annotations = {
       "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
     }
