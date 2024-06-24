@@ -459,6 +459,7 @@ resource "kubernetes_ingress_v1" "registry_ingress" {
     namespace = kubernetes_namespace.infraservices.metadata[0].name
     annotations = {
       "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
+      "nginx.ingress.kubernetes.io/rewrite-target" : "/"
     }
   }
   spec {
