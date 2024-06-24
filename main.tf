@@ -134,8 +134,8 @@ resource "helm_release" "nginx_ingress" {
         configMapNamespace = kubernetes_namespace.infraservices.metadata[0].name
 
         config = {
-          "enable-vts-status"    = true
-          "client-max-body-size" = "300m"
+          "enable-vts-status" = true
+          "proxy-body-size"   = "300m"
         }
 
         tcp = {
