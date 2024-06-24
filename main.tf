@@ -332,18 +332,26 @@ resource "kubernetes_config_map" "tcp_services" {
   }
 }
 
-resource "kubernetes_service" "registry_svc" {
+resource "kubernetes_service" "registry_service" {
   metadata {
-    name      = "registry"
-    namespace = kubernetes_namespace.infraservices.metadata[0].name
+    name = "registry"
+    labels = {
+      app = "docker-registry"
+    }
   }
 
   spec {
+    selector = {
+      app = "docker-registry"
+    }
+
     port {
-      name        = "http"
+      protocol    = "TCP"
       port        = 5000
       target_port = 5000
     }
+
+    type = "ClusterIP"
   }
 }
 
