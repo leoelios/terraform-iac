@@ -273,6 +273,25 @@ resource "helm_release" "mongodb" {
   ]
 }
 
+resource "kubernetes_persistent_volume_claim" "registry_pvc" {
+  metadata {
+    name = "registry-pvc"
+    labels = {
+      app = "docker-registry"
+    }
+    namespace = kubernetes_namespace.infraservices.metadata[0].name
+  }
+
+  spec {
+    access_modes = ["ReadWriteOnce"]
+    resources {
+      requests = {
+        storage = "40Gi"
+      }
+    }
+  }
+}
+
 resource "helm_release" "postgre" {
   name       = "postgre"
   repository = "https://charts.bitnami.com/bitnami"
@@ -300,7 +319,7 @@ resource "helm_release" "postgre" {
 }
 
 resource "kubernetes_config_map" "tcp_services" {
-  depends_on = [helm_release.mongodb]
+  depends_on = [helm_release.mongodb, kubernetes_persistent_volume_claim.registry_pvc]
 
   metadata {
     name      = "tcp-services"
@@ -313,10 +332,111 @@ resource "kubernetes_config_map" "tcp_services" {
   }
 }
 
-resource "kubernetes_manifest" "docker_registry" {
-  manifest = yamldecode(file("${path.module}/docker-registry.yaml"))
+resource "kubernetes_service" "registry_svc" {
+  metadata {
+    name      = "registry"
+    namespace = kubernetes_namespace.infraservices.metadata[0].name
+  }
 
-  depends_on = [
-    vultr_kubernetes.k8
-  ]
+  spec {
+    port {
+      name        = "http"
+      port        = 5000
+      target_port = 5000
+    }
+  }
+}
+
+
+resource "kubernetes_deployment" "docker_registry" {
+  depends_on = [vultr_kubernetes.k8]
+
+  metadata {
+    name = "docker-registry"
+    labels = {
+      app = "docker-registry"
+    }
+    namespace = kubernetes_namespace.infraservices.metadata[0].name
+  }
+
+  spec {
+    replicas = 1
+    selector {
+      match_labels = {
+        app = "docker-registry"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          app = "docker-registry"
+        }
+      }
+
+      spec {
+        volume {
+          name = "auth-volume"
+          empty_dir {}
+        }
+
+        volume {
+          name = "registry-storage"
+          persistent_volume_claim {
+            claim_name = "registry-pvc"
+          }
+        }
+
+        init_container {
+          name  = "init-auth"
+          image = "alpine:3.13"
+
+          command = [
+            "sh",
+            "-c",
+            "apk add --no-cache apache2-utils && htpasswd -bc /auth/htpasswd ${var.registry_user} ${var.registry_password}"
+          ]
+
+          volume_mount {
+            name       = "auth-volume"
+            mount_path = "/auth"
+          }
+        }
+
+        container {
+          name  = "registry"
+          image = "registry:2"
+
+          port {
+            container_port = 5000
+          }
+
+          volume_mount {
+            name       = "auth-volume"
+            mount_path = "/auth"
+          }
+
+          volume_mount {
+            name       = "registry-storage"
+            mount_path = "/var/lib/registry"
+          }
+
+          env {
+            name  = "REGISTRY_AUTH"
+            value = "htpasswd"
+          }
+
+          env {
+            name  = "REGISTRY_AUTH_HTPASSWD_REALM"
+            value = "Registry Realm"
+          }
+
+          env {
+            name  = "REGISTRY_AUTH_HTPASSWD_PATH"
+            value = "/auth/htpasswd"
+          }
+        }
+      }
+    }
+  }
 }
