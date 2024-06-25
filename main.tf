@@ -453,7 +453,7 @@ resource "kubernetes_deployment" "docker_registry" {
 resource "kubernetes_secret" "docker_registry_secret" {
   metadata {
     name      = "registry-secret"
-    namespace = kubernetes_namespace.infraservices.metadata[0].name
+    namespace = kubernetes_namespace.apps.metadata[0].name
   }
 
   data = {
