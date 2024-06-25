@@ -146,7 +146,7 @@ resource "kubernetes_secret" "docker_registry_secret" {
   data = {
     ".dockerconfigjson" = jsonencode({
       auths = {
-        "registry.vava.win" = {
+        "registry.${service_domain}" = {
           username = "${var.registry_user}"
           password = "${var.registry_password}"
           auth     = base64encode("${var.registry_user}:${var.registry_password}")
@@ -174,12 +174,12 @@ resource "kubernetes_ingress_v1" "registry_ingress" {
     ingress_class_name = "nginx"
 
     tls {
-      hosts       = ["registry.vava.win"]
+      hosts       = ["registry.${var.service_domain}"]
       secret_name = "registry-ingress-secret"
     }
 
     rule {
-      host = "registry.vava.win"
+      host = "registry.${var.service_domain}"
 
       http {
         path {

@@ -65,12 +65,12 @@ resource "kubernetes_ingress_v1" "argocd_ingress" {
     ingress_class_name = "nginx"
 
     tls {
-      hosts       = [var.argocd_service_url]
+      hosts       = ["argo.${var.service_domain}"]
       secret_name = "argocd-ingress-secret"
     }
 
     rule {
-      host = var.argocd_service_url
+      host = "argo.${var.service_domain}"
 
       http {
         path {
