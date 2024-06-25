@@ -13,6 +13,10 @@ resource "helm_release" "nginx_ingress" {
 
         service = {
           externalTrafficPolicy = "Local"
+
+          internal = {
+            externalTrafficPolicy = "Local"
+          }
         }
 
         config = {
