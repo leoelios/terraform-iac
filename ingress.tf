@@ -11,14 +11,6 @@ resource "helm_release" "nginx_ingress" {
         replicaCount       = "2"
         configMapNamespace = kubernetes_namespace.infraservices.metadata[0].name
 
-        service = {
-          externalTrafficPolicy = "Local"
-
-          internal = {
-            externalTrafficPolicy = "Local"
-          }
-        }
-
         config = {
           "enable-vts-status" = true
           "proxy-body-size"   = "300m"
