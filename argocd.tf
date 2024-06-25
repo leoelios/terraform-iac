@@ -67,7 +67,7 @@ resource "kubernetes_ingress_v1" "argocd_ingress" {
 
     tls {
       hosts       = [var.argocd_service_url]
-      secret_name = "apps-ingress-secret"
+      secret_name = "argocd-ingress-secret"
     }
 
     rule {
