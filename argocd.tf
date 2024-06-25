@@ -58,8 +58,7 @@ resource "kubernetes_ingress_v1" "argocd_ingress" {
     name      = "argocd-ingress"
     namespace = kubernetes_namespace.apps.metadata[0].name
     annotations = {
-      "cert-manager.io/cluster-issuer"                     = "letsencrypt-prod"
-      "nginx.ingress.kubernetes.io/whitelist-source-range" = var.allowed_ip_range_services
+      "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
     }
   }
   spec {

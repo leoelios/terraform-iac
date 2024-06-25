@@ -166,9 +166,8 @@ resource "kubernetes_ingress_v1" "registry_ingress" {
     name      = "registry-ingress"
     namespace = kubernetes_namespace.infraservices.metadata[0].name
     annotations = {
-      "cert-manager.io/cluster-issuer"                     = "letsencrypt-prod"
-      "nginx.ingress.kubernetes.io/rewrite-target"         = "/"
-      "nginx.ingress.kubernetes.io/whitelist-source-range" = var.allowed_ip_range_services
+      "cert-manager.io/cluster-issuer"             = "letsencrypt-prod"
+      "nginx.ingress.kubernetes.io/rewrite-target" = "/"
     }
   }
   spec {
