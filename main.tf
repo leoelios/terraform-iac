@@ -450,6 +450,27 @@ resource "kubernetes_deployment" "docker_registry" {
   }
 }
 
+resource "kubernetes_secret" "docker_registry_secret" {
+  metadata {
+    name      = "registry-secret"
+    namespace = kubernetes_namespace.infraservices.metadata[0].name
+  }
+
+  data = {
+    ".dockerconfigjson" = base64encode(jsonencode({
+      auths = {
+        "<your-registry-server>" = {
+          username = var.registry_user
+          password = var.registry_password
+          auth     = base64encode("${var.registry_user}:${var.registry_password}")
+        }
+      }
+    }))
+  }
+
+  type = "kubernetes.io/dockerconfigjson"
+}
+
 resource "kubernetes_ingress_v1" "registry_ingress" {
 
   depends_on = [helm_release.nginx_ingress, kubernetes_manifest.letsencrypt_issuer]
@@ -492,3 +513,4 @@ resource "kubernetes_ingress_v1" "registry_ingress" {
   }
 
 }
+
