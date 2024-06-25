@@ -82,3 +82,17 @@ variable "registry_password" {
   nullable    = false
   sensitive   = true
 }
+
+variable "api_secret_key" {
+  description = "Secret key for encryption usages on API's"
+  type        = string
+  sensitive   = true
+  nullable    = false
+}
+
+variable "sendgrid_api_key" {
+  description = "Sendgrid API key"
+  type        = string
+  sensitive   = true
+  nullable    = false
+}

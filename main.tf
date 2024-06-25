@@ -318,6 +318,30 @@ resource "helm_release" "postgre" {
   ]
 }
 
+resource "kubernetes_secret" "database_secret" {
+  metadata {
+    name      = "database-secret"
+    namespace = kubernetes_namespace.apps.metadata[0].name
+  }
+
+  data = {
+    username = "postgres"
+    password = var.postgre_postgres_password
+  }
+}
+
+resource "kubernetes_secret" "api_commons_secret" {
+  metadata {
+    name      = "api-commons-secret"
+    namespace = kubernetes_namespace.apps.metadata[0].name
+  }
+
+  data = {
+    secret           = var.api_secret_key
+    sendgrid_api_key = var.sendgrid_api_key
+  }
+}
+
 resource "kubernetes_config_map" "tcp_services" {
   depends_on = [helm_release.mongodb, kubernetes_persistent_volume_claim.registry_pvc]
 
