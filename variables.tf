@@ -96,3 +96,15 @@ variable "sendgrid_api_key" {
   sensitive   = true
   nullable    = false
 }
+
+variable "argocd_service_url" {
+  description = "DNS url for ArgoCD server"
+  type        = string
+  default     = "argo.vava.win"
+}
+
+variable "allowed_ip_range_services" {
+  description = "Range of IP's allowed to access ingress resources"
+  type        = string
+  default     = "X.X.X.X/32"
+}
