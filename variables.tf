@@ -7,12 +7,6 @@ variable "vultr_api_key" {
   nullable    = false
 }
 
-variable "postgres_password" {
-  description = "Default postgres user password for setup"
-  nullable    = false
-  sensitive   = true
-}
-
 variable "argocd_admin_password" {
   description = "ArgoCD admin password encrypted in Bcrypt algorithm (Default: 1234)"
   nullable    = false
