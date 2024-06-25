@@ -61,6 +61,7 @@ variable "mongodb_storage_size" {
 variable "postgre_postgres_password" {
   description = "PostgreSQL password for postgres user"
   type        = string
+  sensitive   = true
 }
 
 variable "postgres_storage_size" {
