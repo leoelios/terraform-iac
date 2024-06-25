@@ -457,7 +457,7 @@ resource "kubernetes_secret" "docker_registry_secret" {
   }
 
   data = {
-    ".dockerconfigjson" = base64encode(jsonencode({
+    ".dockerconfigjson" = jsonencode({
       auths = {
         "registry.vava.win" = {
           username = "${var.registry_user}"
@@ -465,7 +465,7 @@ resource "kubernetes_secret" "docker_registry_secret" {
           auth     = base64encode("${var.registry_user}:${var.registry_password}")
         }
       }
-    }))
+    })
   }
 
   type = "kubernetes.io/dockerconfigjson"
